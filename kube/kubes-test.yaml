@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubes-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubes-test
+  template:
+    metadata:
+      labels:
+        app: kubes-test
+    spec:
+      containers:
+        - name: kubes-test
+          image:
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/dev
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubes-test
+spec:
+  selector:
+    app: kubes-test
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: LoadBalancer
